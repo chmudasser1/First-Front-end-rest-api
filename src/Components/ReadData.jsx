@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { showUSer } from '../features/userdetailSlice';
+import { deleteUser, showUSer } from '../features/userdetailSlice';
+import { Link } from 'react-router-dom';
 
 const ReadData = () => {
     const dispatch = useDispatch();
     const { users, loading } = useSelector((state) => state.app);
     // const [data, setdata] = useState();
+
     useEffect(() => {
         dispatch(showUSer());
     }, [])
@@ -25,11 +27,17 @@ const ReadData = () => {
                         <h1 className=' text-lg'>Gender: {user.gender}</h1>
                         {/* <h1 className=' text-lg'>Job-Title: {user.job-title}</h1> */}
                         <div className='gap-3 flex'>
-                            <button className='bg-green-300 text-lg px-2 py-1 rounded-lg'>Edit</button>
-                            <button className='bg-red-300 text-lg px-2 py-1 rounded-lg'>Delete</button>
+                            <Link
+                                to={"/edit"}
+                            >
+                                <button className='bg-green-300 text-lg px-2 py-1 rounded-lg'>Edit</button>
+                            </Link>
+                            <button
+                                onClick={()=>dispatch(deleteUser(user.id))}
+                                className='bg-red-300 text-lg px-2 py-1 rounded-lg'>Delete</button>
                         </div>
                     </div>
-                )):<h1>Something is wrong!</h1>}
+                )) : <h1>Something is wrong!</h1>}
             </div>
         </div>
     )
