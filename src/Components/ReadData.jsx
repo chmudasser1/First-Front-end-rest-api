@@ -28,12 +28,12 @@ const ReadData = () => {
                         {/* <h1 className=' text-lg'>Job-Title: {user.job-title}</h1> */}
                         <div className='gap-3 flex'>
                             <Link
-                                to={"/edit"}
+                                to={`/edit/${user.id}`}
                             >
                                 <button className='bg-green-300 text-lg px-2 py-1 rounded-lg'>Edit</button>
                             </Link>
                             <button
-                                onClick={()=>dispatch(deleteUser(user.id))}
+                                onClick={() => dispatch(deleteUser(user.id))}
                                 className='bg-red-300 text-lg px-2 py-1 rounded-lg'>Delete</button>
                         </div>
                     </div>

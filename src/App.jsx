@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Navbar from "./Components/Navbar"
 import ReadData from "./Components/ReadData"
-import ShowingBackenddata from "./Components/ShowingBackenddata"
 import Editdata from './Components/Editdata';
 
 
@@ -13,10 +11,8 @@ function App() {
       <Router>
         <div>
           <Routes>
-            {/* <Navbar /> */}
-            {/* <ShowingBackenddata /> */}
             <Route path='/' element={<ReadData />} />
-            <Route path='/edit' element={<Editdata />} />
+            <Route path='/edit/:id' element={<Editdata />} />
           </Routes>
         </div>
       </Router>
