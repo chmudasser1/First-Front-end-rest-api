@@ -50,7 +50,7 @@ export const updateUser = createAsyncThunk("updateUser", async (data, { rejectWi
     );
     try {
         const result = await response.json();
-        console.log(result)
+        // console.log(result)
         return result;
     } catch (error) {
         console.log(rejectWithValue(error));
