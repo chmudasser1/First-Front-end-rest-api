@@ -26,7 +26,7 @@ const ReadData = () => {
                         <h1 className=' text-lg'>Email: {user.email}</h1>
                         <h1 className=' text-lg'>Gender: {user.gender}</h1>
                         {/* <h1 className=' text-lg'>Job_Title: {user.jobTitle}</h1> */}
-                        {/* <h1 className=' text-lg'>Job-Title: {user.job-title}</h1> */}
+                        <h1 className=' text-lg'>Job-Title: {user.job_title}</h1>
                         <div className='gap-3 flex'>
                             <Link
                                 to={`/edit/${user._id}`}
