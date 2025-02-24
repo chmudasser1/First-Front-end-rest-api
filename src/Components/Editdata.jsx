@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { updateUser  } from '../features/userdetailSlice';
+import { updateUser } from '../features/userdetailSlice';
 
 const Editdata = () => {
     const { id } = useParams();
@@ -13,8 +13,12 @@ const Editdata = () => {
 
     useEffect(() => {
         if (id && users.length > 0) {
-            const singleUser  = users.filter((user) => user.id === Number(id));
-            setUpdateData(singleUser [0]);
+            const singleUser = users.find((user) => user._id === id); // Use find instead of filter
+            if (singleUser) {
+                setUpdateData(singleUser);
+            } else {
+                console.error("User  not found");
+            }
         }
     }, [id, users]);
 
@@ -24,7 +28,7 @@ const Editdata = () => {
 
     const handleUpdate = (e) => {
         e.preventDefault();
-        dispatch(updateUser (updateData));
+        dispatch(updateUser({ ...updateData, id: updateData._id }));
         navigate("/");
     };
 

@@ -41,7 +41,7 @@ export const updateUser = createAsyncThunk("updateUser", async (data, { rejectWi
     const response = await fetch(`http://localhost:8000/api/user/${data.id}`,
 
         {
-            method: "PATCH",
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
             },
