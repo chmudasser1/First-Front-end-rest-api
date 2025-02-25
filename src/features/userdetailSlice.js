@@ -58,6 +58,30 @@ export const updateUser = createAsyncThunk("updateUser", async (data, { rejectWi
     }
 })
 
+//Create Post
+
+export const createuser = createAsyncThunk("createuser", async (data, { rejectWithValue }) => {
+    console.log(data)
+    const response = await fetch(`http://localhost:8000/api/user`,
+
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+        }
+    );
+    try {
+        const result = await response.json();
+        // console.log(result)
+        return result;
+    } catch (error) {
+        console.log(rejectWithValue(error));
+
+    }
+})
+
 export const userDetail = createSlice({
     name: "userDetail",
     initialState: {
@@ -129,6 +153,17 @@ export const userDetail = createSlice({
 
             })
             .addCase(updateUser.rejected, (state, action) => {
+                state.loading = true;
+                state.error = action.payload;
+            })
+            .addCase(createuser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(createuser.fulfilled, (state, action) => {
+                state.loading = false;
+
+            })
+            .addCase(createuser.rejected, (state, action) => {
                 state.loading = true;
                 state.error = action.payload;
             });

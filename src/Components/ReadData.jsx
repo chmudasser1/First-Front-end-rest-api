@@ -40,6 +40,13 @@ const ReadData = () => {
                     </div>
                 )) : <h1>Something is wrong!</h1>}
             </div>
+            <div className='flex justify-center my-4'>
+                <Link
+                    to={`/add`}
+                >
+                    <button className='rounded-xl px-4 py-3 text-xl font-bold bg-green-500 text-black'>Add more data</button>
+                </Link>
+            </div>
         </div>
     )
 }

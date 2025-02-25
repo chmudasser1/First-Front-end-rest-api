@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import ReadData from "./Components/ReadData"
 import Editdata from './Components/Editdata';
+import CreateData from './Components/CreateData';
 
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <div>
           <Routes>
             <Route path='/' element={<ReadData />} />
+            <Route path='/add' element={<CreateData/>} />
             <Route path='/edit/:id' element={<Editdata />} />
           </Routes>
         </div>
