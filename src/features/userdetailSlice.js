@@ -82,6 +82,87 @@ export const createuser = createAsyncThunk("createuser", async (data, { rejectWi
     }
 })
 
+// Create signup
+export const createsignup = createAsyncThunk('createsignup', async (data, { rejectWithValue }) => {
+    console.log(data);
+    try {
+        const response = await fetch(`http://localhost:8000/api/signup`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            // Handle non-2xx responses
+            const errorData = await response.json();
+            return rejectWithValue(errorData);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+// Create Loginin
+export const createsignin = createAsyncThunk('createsignin', async (data, { rejectWithValue }) => {
+    console.log(data);
+    try {
+        const response = await fetch(`http://localhost:8000/api/Login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            // Handle non-2xx responses
+            const errorData = await response.json();
+            return rejectWithValue(errorData);
+        }
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+// Define the initial state
+const initialState = {
+    user: null,
+    loading: false,
+    error: null,
+};
+
+// Create the slice
+const signupSlice = createSlice({
+    name: 'signup', // Add a name for the slice
+    initialState,
+    reducers: {
+        // Define your synchronous reducers here if needed
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(createsignup.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(createsignup.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload; // Assuming the payload contains user data
+            })
+            .addCase(createsignup.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload; // Handle the error
+            });
+    }
+});
+
+
 export const userDetail = createSlice({
     name: "userDetail",
     initialState: {
@@ -169,5 +250,5 @@ export const userDetail = createSlice({
             });
     },
 });
-
+export const { actions, reducer } = signupSlice;
 export default userDetail.reducer;

@@ -29,7 +29,7 @@ const Editdata = () => {
     const handleUpdate = (e) => {
         e.preventDefault();
         dispatch(updateUser({ ...updateData, id: updateData._id }));
-        navigate("/");
+        navigate("/home");
     };
 
     return (

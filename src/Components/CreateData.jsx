@@ -27,7 +27,7 @@ const CreateData = () => {
             return;
         }
         dispatch(createuser(newdata));
-        navigate("/")
+        navigate("/home")
     }
 
     return (
