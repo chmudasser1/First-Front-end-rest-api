@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { createsignup } from '../features/userdetailSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Signup = () => {
@@ -12,6 +12,7 @@ const Signup = () => {
     const [signupError, setSignupError] = useState('');
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const SubmitSignup = (e) => {
         e.preventDefault(); // Prevent default form submission
@@ -31,6 +32,7 @@ const Signup = () => {
         };
         console.log(newUser)
         dispatch(createsignup(newUser)); // Dispatch the signup action
+        navigate("/Login")
     };
 
     return (
@@ -39,7 +41,7 @@ const Signup = () => {
                 <div className="flex-1 p-8">
                     <h1 className="text-2xl font-semibold">Create Account</h1>
                     <span className="text-sm">or use your email for registration</span>
-                    <form className="flex flex-col mt-4" onSubmit={SubmitSignup}>
+                    <form className="flex flex-col mt-4" >
                         <label>Name</label>
                         <input onChange={(e) => setName(e.target.value)} type="text" placeholder="Name" className="p-2 border border-gray-300 rounded mb-2" />
                         <label>Email</label>
@@ -47,12 +49,11 @@ const Signup = () => {
                         <label>Password</label>
                         <input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Password" className="p-2 border border-gray-300 rounded mb-2" />
                         {signupError && <p className="text-red-500">{signupError}</p>} {/* Display signup error message */}
-                        <Link
-                            to={"/Login"}>
-                            <button  type="submit" className="bg-indigo-600 text-white py-2 rounded mt-2 px-4" >
-                                Submit
-                            </button>
-                        </Link>
+                        <button
+                            onClick={SubmitSignup}
+                            type="submit" className="bg-indigo-600 text-white py-2 rounded mt-2 px-4" >
+                            Submit
+                        </button>
                         <Link
                             to={"/Login"}>
                             <h1 className='text-center  text-white bg-indigo-600 py-2 rounded mt-2 px-4'>I have already registered.</h1>

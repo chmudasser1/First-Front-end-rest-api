@@ -18,7 +18,7 @@ const ReadData = () => {
     return (
         <div className='container mx-auto pt-4 bg-gradient-to-tr from-slate-400 via-gray-400 to-zinc-400'>
             <div className='grid grid-cols-4 gap-6'>
-                {users ? users.map((user, index) => (
+                {Array.isArray(users) ? users.map((user, index) => (
                     <div key={user._id} className='border-2 px-2 py-2 border-blue-950 '>
                         {/* <h1 className='text-2xl text-blue-600 text-center border-b-2 border-black'>{user.id}</h1> */}
                         <h1 className='pt-2 text-lg'>First-Name: {user.first_name}</h1>

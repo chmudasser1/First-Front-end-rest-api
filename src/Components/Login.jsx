@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Cookies from 'js-cookie';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -28,9 +29,11 @@ const Login = () => {
             Password,
         };
 
-        axios.post('http://localhost:8000/api/Login', checkuser)
+        axios.post('http://localhost:8000/api/Login', checkuser, { withCredentials: true })
             .then(response => {
-                if (response.data === "Success") {
+                if (response.data.msg === "Success") {
+                    const sessionID = response.data.token;  
+                    Cookies.set('uid', sessionID, { expires: 7 });
                     navigate('/home');
                     console.log("Sign-in successful, navigating to home.");
                 } else {

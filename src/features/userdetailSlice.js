@@ -4,7 +4,9 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const showUSer = createAsyncThunk('showUser', async (args, { rejectWithValue }) => {
 
-    const response = await fetch("http://localhost:8000/api/user");
+    const response = await fetch("http://localhost:8000/api/user",{
+        withCredentials: true
+    });
     try {
         const result = await response.json();
         // console.log(result);
@@ -112,6 +114,7 @@ export const createsignin = createAsyncThunk('createsignin', async (data, { reje
     try {
         const response = await fetch(`http://localhost:8000/api/Login`, {
             method: "POST",
+            credentials: 'include',
             headers: {
                 "Content-Type": "application/json",
             },
