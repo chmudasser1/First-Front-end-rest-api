@@ -1,30 +1,37 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-//Read User
-
+// Read User
 export const showUSer = createAsyncThunk('showUser', async (args, { rejectWithValue }) => {
+    const token = localStorage.getItem("uid");
+    if (!token) {
+        return rejectWithValue("No token found");
+    }
 
-    const response = await fetch("http://localhost:8000/api/user",{
-        withCredentials: true
+    const response = await fetch("http://localhost:8000/api/user", {
+        credentials: "include",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
     });
+
     try {
         const result = await response.json();
-        // console.log(result);
         return result;
-
     } catch (error) {
         return rejectWithValue(error);
     }
+});
 
-})
-
-
-//delete action
+// Delete User
 export const deleteUser = createAsyncThunk("deleteUser", async (id, { rejectWithValue }) => {
-
-    const response = await fetch(`http://localhost:8000/api/user/${id}`,
-        { method: "DELETE" }
-    );
+    const token = localStorage.getItem("uid")
+    const response = await fetch(`http://localhost:8000/api/user/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+    });
 
     try {
         const result = await response.json();
@@ -33,58 +40,53 @@ export const deleteUser = createAsyncThunk("deleteUser", async (id, { rejectWith
     } catch (error) {
         return rejectWithValue(error);
     }
-}
-);
+});
 
-//update action
-
+// Update User
 export const updateUser = createAsyncThunk("updateUser", async (data, { rejectWithValue }) => {
-    console.log(data)
-    const response = await fetch(`http://localhost:8000/api/user/${data.id}`,
+    const token = localStorage.getItem("uid")
+    console.log(data);
+    const response = await fetch(`http://localhost:8000/api/user/${data.id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+    });
 
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        }
-    );
     try {
         const result = await response.json();
-        // console.log(result)
         return result;
     } catch (error) {
-        console.log(rejectWithValue(error));
-
+        return rejectWithValue(error);
     }
-})
+});
 
-//Create Post
-
+// Create User
 export const createuser = createAsyncThunk("createuser", async (data, { rejectWithValue }) => {
-    console.log(data)
-    const response = await fetch(`http://localhost:8000/api/user`,
+    console.log(data);
+    const token = localStorage.getItem("uid");
+    const response = await fetch(`http://localhost:8000/api/user`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+    });
 
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        }
-    );
     try {
         const result = await response.json();
-        // console.log(result)
         return result;
     } catch (error) {
-        console.log(rejectWithValue(error));
-
+        return rejectWithValue(error);
     }
-})
+});
 
-// Create signup
+// Signup
 export const createsignup = createAsyncThunk('createsignup', async (data, { rejectWithValue }) => {
     console.log(data);
     try {
@@ -93,11 +95,10 @@ export const createsignup = createAsyncThunk('createsignup', async (data, { reje
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
 
         if (!response.ok) {
-            // Handle non-2xx responses
             const errorData = await response.json();
             return rejectWithValue(errorData);
         }
@@ -108,7 +109,8 @@ export const createsignup = createAsyncThunk('createsignup', async (data, { reje
         return rejectWithValue(error.message);
     }
 });
-// Create Loginin
+
+// Login
 export const createsignin = createAsyncThunk('createsignin', async (data, { rejectWithValue }) => {
     console.log(data);
     try {
@@ -118,16 +120,17 @@ export const createsignin = createAsyncThunk('createsignin', async (data, { reje
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
 
         if (!response.ok) {
-            // Handle non-2xx responses
             const errorData = await response.json();
             return rejectWithValue(errorData);
         }
 
         const result = await response.json();
+        console.log("Token received from backend:", result.token); // Debugging
+        localStorage.setItem("uid", result.token); // Store the token
         return result;
     } catch (error) {
         return rejectWithValue(error.message);
@@ -141,9 +144,9 @@ const initialState = {
     error: null,
 };
 
-// Create the slice
+// Create the signup slice
 const signupSlice = createSlice({
-    name: 'signup', // Add a name for the slice
+    name: 'signup',
     initialState,
     reducers: {
         // Define your synchronous reducers here if needed
@@ -165,7 +168,7 @@ const signupSlice = createSlice({
     }
 });
 
-
+// Create the user detail slice
 export const userDetail = createSlice({
     name: "userDetail",
     initialState: {
@@ -173,60 +176,32 @@ export const userDetail = createSlice({
         loading: false,
         error: null,
     },
-    // extraReducers: {
-    //     [showUSer.pending]: (state, action) => {
-    //         state.loading = true;
-    //         state,error=null;
-    //     },
-    //     [showUSer.fulfilled]: (state, action) => {
-    //         state.loading = true;
-    //         state.users = action.payload;
-    //     },
-    //     [showUSer.rejected]: (state, action) => {
-    //         state.loading = true;
-    //         state.error = action.payload.message;
-    //     },
-    // },
-    // [deleteUser.pending]: (state) => {
-    //     state.loading = true;
-    //   },
-    //   [deleteUser.fulfilled]: (state, action) => {
-    //     state.loading = false;
-    //     const { id } = action.payload;
-    //     if (id) {
-    //       state.users = state.users.filter((ele) => ele.id !== id);
-    //     }
-    //   },
-    //   [deleteUser.rejected]: (state, action) => {
-    //     state.loading = false;
-    //     state.error = action.payload;
-    //   },
     extraReducers: (builder) => {
         builder
             .addCase(showUSer.pending, (state) => {
-                state.loading = true; // Set loading to true when the fetch starts
-                state.error = null; // Reset error state
+                state.loading = true;
+                state.error = null;
             })
             .addCase(showUSer.fulfilled, (state, action) => {
-                state.loading = false; // Set loading to false when the fetch is complete
+                state.loading = false;
                 state.users = action.payload; // Store the fetched users
             })
             .addCase(showUSer.rejected, (state, action) => {
-                state.loading = false; // Set loading to false when the fetch fails
+                state.loading = false;
                 state.error = action.payload; // Store the error message
             })
             .addCase(deleteUser.pending, (state) => {
-                state.loading = true; // Set loading to true when the request is pending
+                state.loading = true;
             })
             .addCase(deleteUser.fulfilled, (state, action) => {
-                state.loading = false; // Set loading to false when the request is fulfilled
+                state.loading = false;
                 const { id } = action.payload; // Get the user ID from the action payload
                 if (id) {
                     state.users = state.users.filter((user) => user.id !== id); // Remove the user from the state
                 }
             })
             .addCase(deleteUser.rejected, (state, action) => {
-                state.loading = false; // Set loading to false when the request is rejected
+                state.loading = false;
                 state.error = action.payload; // Set the error message from the action payload
             })
             .addCase(updateUser.pending, (state) => {
@@ -234,10 +209,10 @@ export const userDetail = createSlice({
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 state.loading = false;
-
+                // Update the user in the state if needed
             })
             .addCase(updateUser.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.payload;
             })
             .addCase(createuser.pending, (state) => {
@@ -245,13 +220,15 @@ export const userDetail = createSlice({
             })
             .addCase(createuser.fulfilled, (state, action) => {
                 state.loading = false;
-
+                // Add the new user to the state if needed
             })
             .addCase(createuser.rejected, (state, action) => {
-                state.loading = true;
+                state.loading = false;
                 state.error = action.payload;
             });
     },
 });
+
+// Export actions and reducers
 export const { actions, reducer } = signupSlice;
 export default userDetail.reducer;

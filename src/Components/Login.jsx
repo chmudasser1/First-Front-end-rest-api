@@ -29,11 +29,17 @@ const Login = () => {
             Password,
         };
 
-        axios.post('http://localhost:8000/api/Login', checkuser, { withCredentials: true })
+        axios.post('http://localhost:8000/api/Login', checkuser, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get('uid')}`,
+            },
+            withCredentials: true,
+        })
             .then(response => {
                 if (response.data.msg === "Success") {
-                    const sessionID = response.data.token;  
-                    Cookies.set('uid', sessionID, { expires: 7 });
+                    const sessionID = response.data.token;
+                    Cookies.set('uid', sessionID);
+                    
                     navigate('/home');
                     console.log("Sign-in successful, navigating to home.");
                 } else {
